@@ -30,6 +30,7 @@ messages = [
 
 Весь код стоит разбить на логические части с помощью функций.
 """
+from collections import Counter
 import random
 import uuid
 import datetime
@@ -66,5 +67,45 @@ def generate_chat_history():
     return messages
 
 
-if __name__ == "__main__":
-    print(generate_chat_history())
+# if __name__ == "__main__":
+#     print(generate_chat_history())
+
+messages = generate_chat_history()
+print(messages)
+
+#1
+ids = [name["sent_by"] for name in messages]
+count_ids = {name: ids.count(name) for name in ids}
+print(count_ids)
+print(f'id: {max(count_ids, key=count_ids.get)} написал больше всего сообщений')
+
+#2
+replied_messenges = [reply['reply_for'] for reply in messages]
+count_replied = Counter(replied_messenges)
+del count_replied[None]
+print(f'Больше всего отвечали на сообщение {max(count_replied, key=count_replied.get)}')
+
+# 3
+
+# 4
+
+time_of_message = {
+    'утром': 0,
+    'днем': 0,
+    'вечером': 0
+}
+
+for sent_message in messages:
+    if sent_message['sent_at'].hour < 12:
+        time_of_message['утром'] += 1
+    elif sent_message['sent_at'].hour < 18:
+        time_of_message['днем'] += 1
+    else:
+        time_of_message['вечером'] += 1
+
+print(f"Больше всего сообщений: {max(time_of_message, key=time_of_message.get)}")
+
+#5
+
+
+
